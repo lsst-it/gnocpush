@@ -28,12 +28,14 @@ def push_to_gnoc(alerts, agent):
     # initialize the alertmon agent
     for alert in alerts:
         data = {
-            'node_name': alert['labels'].get('pod', 'Unknown'),
-            'service_name': alert['labels'].get('alertname', 'Unknown'),
+            'node_name': alert['labels'].get('node_name', 'Unknown'),
+            'service_name': alert['labels'].get('service_name', 'Unknown'),
             'severity': sanitize_severity(alert['labels'].get('severity', 'Unknown')),
             'description': alert['annotations'].get('description', 'Unknown'),
             'start_time': parser.isoparse(alert['startsAt']).timestamp()
         }
+
+        log.debug(f"Pushing alert: {data}")
 
         agent.add_alert(Alert(
             start_time   = data.get('start_time', None),
