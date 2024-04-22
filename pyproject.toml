@@ -1,0 +1,15 @@
+[project]
+name = "gnocpush"
+version = "0.1.0"
+dependencies = [
+  "globalnoc_alertmon_agent",
+  "python-dateutil",
+  "requests",
+]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project.scripts]
+gnocpush = "gnocpush.cli:main"
