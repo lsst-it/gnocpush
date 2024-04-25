@@ -29,6 +29,7 @@ def push_to_gnoc(alerts, agent):
     for alert in alerts:
         data = {
             'node_name': alert['labels'].get('node_name', 'Unknown'),
+            'device':  alert['labels'].get('device'),
             'service_name': alert['labels'].get('service_name', 'Unknown'),
             'severity': sanitize_severity(alert['labels'].get('severity', 'Unknown')),
             'description': alert['annotations'].get('description', 'Unknown'),
@@ -38,8 +39,9 @@ def push_to_gnoc(alerts, agent):
         log.debug(f"Pushing alert: {data}")
 
         agent.add_alert(Alert(
-            start_time   = data.get('start_time', None),
+            start_time   = data.get('start_time'),
             node_name    = data.get('node_name'),
+            device       = data.get('device'),
             service_name = data.get('service_name'),
             description  = data.get('description'),
             severity     = data.get('severity')
