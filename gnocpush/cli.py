@@ -3,63 +3,20 @@
 import os
 import requests
 import sys
-import yaml
 import logging
 
-from dateutil import parser
-from globalnoc_alertmon_agent import AlertMonAgent, Alert
-
-def sanitize_severity(severity):
-    s = 'Unknown'
-
-    # match statement doesn't seem to have an easy way to do case insensitive
-    # matching, so we force everything to lower case.
-    match severity.lower():
-        case 'critical' | 'alert': s = 'Critical'
-        case 'major' | 'warning': s ='Major'
-        case 'minor' | 'info': s = 'Minor'
-        case 'unknown': s = 'Unknown'
-        case 'ok': s ='Ok'
-
-    log.debug(f'severity: {severity} -> {s}')
-    return s
-
-def push_to_gnoc(alerts, agent):
-    # initialize the alertmon agent
-    for alert in alerts:
-        data = {
-            'node_name': alert['labels'].get('node_name', 'Unknown'),
-            'device':  alert['labels'].get('device'),
-            'service_name': alert['labels'].get('service_name', 'Unknown'),
-            'severity': sanitize_severity(alert['labels'].get('severity', 'Unknown')),
-            'description': alert['annotations'].get('description', 'Unknown'),
-            'start_time': parser.isoparse(alert['startsAt']).timestamp()
-        }
-
-        log.debug(f"Pushing alert: {data}")
-
-        agent.add_alert(Alert(
-            start_time   = data.get('start_time'),
-            node_name    = data.get('node_name'),
-            device       = data.get('device'),
-            service_name = data.get('service_name'),
-            description  = data.get('description'),
-            severity     = data.get('severity')
-        ))
-
-    agent.send_alerts()
-
+from gnocpush import Pusher
 
 def get_alertmanager_alerts(url):
     r = requests.get(url)
-    return r.json()#['data']['alerts']
+    return r.json()
 
 def main():
     config = {}
 
     logging.basicConfig(level=logging.DEBUG)
     global log
-    log = logging.getLogger()
+    log = logging.getLogger(__name__)
 
     try:
         config['username'] = os.environ['GNOC_USERNAME']
@@ -71,16 +28,9 @@ def main():
         print(f"The {e} environment variable is not set.")
         sys.exit(1)
 
+    yeeter = Pusher(config)
     alerts = get_alertmanager_alerts(config['alertmanager_url'])
-
-    agent = AlertMonAgent(
-        username    = config['username'],
-        password    = config['password'],
-        server      = config['server'],
-        realm       = config['realm']
-    )
-
-    push_to_gnoc(alerts, agent)
+    yeeter.push(alerts)
 
 if __name__ == '__main__':
     main()
