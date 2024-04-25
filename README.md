@@ -8,6 +8,17 @@ virtualenv venv
 pip install --editable .
 ```
 
+```bash
+docker build -t lsstit/gnocpush .
+docker push lsstit/gnocpush
+```
+
+## Testing with OCI image
+
+```bash
+docker run -e GNOC_USERNAME=$GNOC_USERNAME -e GNOC_PASSWORD=$GNOC_PASSWORD -e GNOC_SERVER=$GNOC_SERVER -e GNOC_REALM=$GNOC_REALM --network=host lsstit/gnocpush
+```
+
 ## Testing gnocgateway with curl
 
 ```bash
