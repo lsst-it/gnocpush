@@ -42,7 +42,7 @@ def main():
     global yeeter
     yeeter = Pusher(config)
 
-    app.run(port=8080)
+    app.run(port=8080, host="0.0.0.0")
 
 
 if __name__ == '__main__':
