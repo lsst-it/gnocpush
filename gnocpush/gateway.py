@@ -19,7 +19,7 @@ def push_endpoint():
 
     log.debug(f"Received data: {json.dumps(data)}")
 
-    yeeter.push(data)
+    yeeter.push(data['alerts'])
 
     # Return a response
     return {'status': 'success'}
