@@ -1,5 +1,6 @@
 #!/bin/env python3
 
+import json
 import logging
 import os
 import sys
@@ -16,9 +17,10 @@ def push_endpoint():
     # Get the data from the request
     data = request.get_json()
 
-    print(data)
+    log.debug(f"Received data: {json.dumps(data)}")
 
     yeeter.push(data)
+
     # Return a response
     return {'status': 'success'}
 
