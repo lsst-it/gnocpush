@@ -2,6 +2,7 @@
 name = "gnocpush"
 version = "0.1.0"
 dependencies = [
+  "flask",
   "globalnoc_alertmon_agent",
   "python-dateutil",
   "requests",
@@ -13,3 +14,4 @@ build-backend = "setuptools.build_meta"
 
 [project.scripts]
 gnocpush = "gnocpush.cli:main"
+gnocgateway = "gnocpush.gateway:main"
