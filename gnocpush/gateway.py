@@ -25,6 +25,11 @@ def push_endpoint():
     return {'status': 'success'}
 
 
+@app.route('/healthz', methods=['GET'])
+def healthz():
+    return {'status': 'ok'}
+
+
 def main():
     config = {}
 
