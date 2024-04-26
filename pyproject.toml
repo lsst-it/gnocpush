@@ -19,3 +19,6 @@ gnocgateway = "gnocpush.gateway:main"
 
 [tool.flake8]
 ignore = ['E221', 'E251']
+
+[tool.setuptools.packages.find]
+exclude = ["charts"]
