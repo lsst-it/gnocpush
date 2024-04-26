@@ -2,6 +2,7 @@
 name = "gnocpush"
 version = "0.1.0"
 dependencies = [
+  "flake8-pyproject",
   "flask",
   "globalnoc_alertmon_agent",
   "python-dateutil",
@@ -15,3 +16,6 @@ build-backend = "setuptools.build_meta"
 [project.scripts]
 gnocpush = "gnocpush.cli:main"
 gnocgateway = "gnocpush.gateway:main"
+
+[tool.flake8]
+ignore = ['E221', 'E251']

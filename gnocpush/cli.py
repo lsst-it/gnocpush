@@ -7,9 +7,11 @@ import logging
 
 from gnocpush import Pusher
 
+
 def get_alertmanager_alerts(url):
     r = requests.get(url)
     return r.json()
+
 
 def main():
     config = {}
@@ -31,6 +33,7 @@ def main():
     yeeter = Pusher(config)
     alerts = get_alertmanager_alerts(config['alertmanager_url'])
     yeeter.push(alerts)
+
 
 if __name__ == '__main__':
     main()
