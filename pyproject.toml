@@ -5,6 +5,7 @@ dependencies = [
   "flake8-pyproject",
   "flask",
   "globalnoc_alertmon_agent",
+  "prometheus-flask-exporter==0.23.0",
   "python-dateutil",
   "requests",
 ]

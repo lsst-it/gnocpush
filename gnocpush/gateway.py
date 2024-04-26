@@ -7,9 +7,11 @@ import sys
 
 from flask import Flask, request
 from gnocpush import Pusher
+from prometheus_flask_exporter import PrometheusMetrics
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024  # 4 MB
+metrics = PrometheusMetrics(app)
 
 
 @app.route('/alerts', methods=['POST'])
@@ -26,6 +28,7 @@ def push_endpoint():
 
 
 @app.route('/healthz', methods=['GET'])
+@metrics.do_not_track()
 def healthz():
     return {'status': 'ok'}
 
