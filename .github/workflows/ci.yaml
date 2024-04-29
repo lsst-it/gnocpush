@@ -92,6 +92,23 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
+  helm-lint:
+    runs-on: ubuntu-latest
+    name: helm lint
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Run helm lint
+        run: cd charts/gnocpush && helm lint .
+
   gh-release:
     name: Create GitHub Release
     needs: oci_image
