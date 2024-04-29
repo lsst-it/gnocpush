@@ -17,7 +17,7 @@ def parse_args():
     """Parse command-line arguments"""
 
     parser = argparse.ArgumentParser(
-        prog='gnocpush',
+        prog='gnocscrape',
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument(
