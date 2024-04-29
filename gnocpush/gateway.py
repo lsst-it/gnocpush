@@ -1,11 +1,11 @@
 #!/bin/env python3
 
+import argparse
 import json
 import logging
-import os
-import sys
 
 from flask import Flask, request, jsonify
+from gnocpush.envdefault import EnvDefault
 from gnocpush import Pusher
 from prometheus_flask_exporter import PrometheusMetrics
 from waitress import serve
@@ -38,27 +38,64 @@ def healthz():
     return {'status': 'ok'}
 
 
+def parse_args():
+    """Parse command-line arguments"""
+
+    parser = argparse.ArgumentParser(
+        prog='gnocpush',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    parser.add_argument(
+        '-u', '--user', action=EnvDefault, envvar='GNOC_USER',
+        help='Specify the GNOC username'
+    )
+    parser.add_argument(
+        '-p', '--pass', action=EnvDefault, envvar='GNOC_PASS',
+        dest='password',
+        help='Specify the GNOC password'
+    )
+    parser.add_argument(
+        '-s', '--server', action=EnvDefault, envvar='GNOC_SERVER',
+        help='Specify the GNOC server'
+    )
+    parser.add_argument(
+        '-r', '--realm', action=EnvDefault, envvar='GNOC_REALM',
+        help='Specify the GNOC realm'
+    )
+    parser.add_argument(
+        '-l', '--listen',
+        default='localhost:8080',
+        help='Specify the address:port to listen on'
+    )
+    parser.add_argument(
+        '-v', '--verbose',
+        dest='debug',
+        action=argparse.BooleanOptionalAction,
+        help='Enable verbose logging'
+    )
+
+    return parser.parse_args()
+
+
 def main():
-    config = {}
+    args = parse_args()
 
-    logging.basicConfig(level=logging.DEBUG)
-    logging.getLogger('waitress').setLevel(logging.DEBUG)
+    log_level = logging.DEBUG if args.debug else logging.INFO
+    logging.basicConfig(level=log_level)
+    logging.getLogger('waitress').setLevel(log_level)
+
     global log
-    log = logging.getLogger()
-
-    try:
-        config['username'] = os.environ['GNOC_USERNAME']
-        config['password'] = os.environ['GNOC_PASSWORD']
-        config['server'] = os.environ['GNOC_SERVER']
-        config['realm'] = os.environ['GNOC_REALM']
-    except KeyError as e:
-        print(f"The {e} environment variable is not set.")
-        sys.exit(1)
+    log = logging.getLogger(__name__)
 
     global yeeter
-    yeeter = Pusher(config)
+    yeeter = Pusher({
+        'username': args.user,
+        'password': args.password,
+        'server': args.server,
+        'realm': args.realm
+    })
 
-    serve(app, host='0.0.0.0', port=8080)
+    serve(app, listen=args.listen)
 
 
 if __name__ == '__main__':

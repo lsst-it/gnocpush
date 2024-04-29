@@ -1,10 +1,10 @@
 #!/bin/env python3
 
-import os
-import requests
-import sys
+import argparse
 import logging
+import requests
 
+from gnocpush.envdefault import EnvDefault
 from gnocpush import Pusher
 
 
@@ -13,25 +13,55 @@ def get_alertmanager_alerts(url):
     return r.json()
 
 
-def main():
-    config = {}
+def parse_args():
+    """Parse command-line arguments"""
 
-    logging.basicConfig(level=logging.DEBUG)
+    parser = argparse.ArgumentParser(
+        prog='gnocpush',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    parser.add_argument(
+        '-u', '--user', action=EnvDefault, envvar='GNOC_USER',
+        help='Specify the GNOC username'
+    )
+    parser.add_argument(
+        '-p', '--pass', action=EnvDefault, envvar='GNOC_PASS',
+        dest='password',
+        help='Specify the GNOC password'
+    )
+    parser.add_argument(
+        '-s', '--server', action=EnvDefault, envvar='GNOC_SERVER',
+        help='Specify the GNOC server'
+    )
+    parser.add_argument(
+        '-a', '--url', action=EnvDefault, envvar='ALERTMANAGER_URL',
+        help='Specify the Alertmanager URL to scrape alerts from'
+    )
+    parser.add_argument(
+        '-v', '--verbose',
+        dest='debug',
+        action=argparse.BooleanOptionalAction,
+        help='Enable verbose logging'
+    )
+
+    return parser.parse_args()
+
+
+def main():
+    args = parse_args()
+
+    log_level = logging.DEBUG if args.debug else logging.INFO
+    logging.basicConfig(level=log_level)
     global log
     log = logging.getLogger(__name__)
 
-    try:
-        config['username'] = os.environ['GNOC_USERNAME']
-        config['password'] = os.environ['GNOC_PASSWORD']
-        config['server'] = os.environ['GNOC_SERVER']
-        config['realm'] = os.environ['GNOC_REALM']
-        config['alertmanager_url'] = os.environ['ALERTMANAGER_URL']
-    except KeyError as e:
-        print(f"The {e} environment variable is not set.")
-        sys.exit(1)
-
-    yeeter = Pusher(config)
-    alerts = get_alertmanager_alerts(config['alertmanager_url'])
+    yeeter = Pusher({
+        'username': args.user,
+        'password': args.password,
+        'server': args.server,
+        'realm': args.realm
+    })
+    alerts = get_alertmanager_alerts(args.url)
     yeeter.push(alerts)
 
 
