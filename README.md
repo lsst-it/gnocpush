@@ -19,13 +19,29 @@ docker push lsstit/gnocpush
 docker run -e GNOC_USERNAME=$GNOC_USERNAME -e GNOC_PASSWORD=$GNOC_PASSWORD -e GNOC_SERVER=$GNOC_SERVER -e GNOC_REALM=$GNOC_REALM --network=host lsstit/gnocpush
 ```
 
-## Testing gnocgateway with curl
+## Testing on k8s
 
 ```bash
-curl http://localhost:8080/push -v --json @- -u alertmanager:hello < alerts.json
+helm upgrade --install \
+  gnocpush ./charts/gnocpush \
+  --create-namespace --namespace gnocpush \
+  -f ./values.yaml
 ```
 
-## Testing gnocgateway with curl
+```bash
+k logs alertmanager-kube-prometheus-stack-alertmanager-0 --tail=100 -f
+
+k logs -l app.kubernetes.io/instance=gnocpush -f
+```
+
+### prometheus metrics
+
+```bash
+k -n gnocpush port-forward gnocpush-dc4d94d8-mqvqq 8080
+$ curl localhost:8080/metrics
+```
+
+## Testing gnocpush with curl
 
 ### without auth
 
