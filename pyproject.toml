@@ -8,6 +8,7 @@ dependencies = [
   "prometheus-flask-exporter==0.23.0",
   "python-dateutil",
   "requests",
+  "waitress",
 ]
 
 [build-system]

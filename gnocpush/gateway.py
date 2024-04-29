@@ -8,6 +8,7 @@ import sys
 from flask import Flask, request, jsonify
 from gnocpush import Pusher
 from prometheus_flask_exporter import PrometheusMetrics
+from waitress import serve
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024  # 4 MB
@@ -41,6 +42,7 @@ def main():
     config = {}
 
     logging.basicConfig(level=logging.DEBUG)
+    logging.getLogger('waitress').setLevel(logging.DEBUG)
     global log
     log = logging.getLogger()
 
@@ -56,7 +58,7 @@ def main():
     global yeeter
     yeeter = Pusher(config)
 
-    app.run(port=8080, host="0.0.0.0")
+    serve(app, host='0.0.0.0', port=8080)
 
 
 if __name__ == '__main__':
