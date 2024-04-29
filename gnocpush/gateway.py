@@ -5,7 +5,7 @@ import logging
 import os
 import sys
 
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from gnocpush import Pusher
 from prometheus_flask_exporter import PrometheusMetrics
 
@@ -21,7 +21,11 @@ def push_endpoint():
 
     log.debug(f"Received data: {json.dumps(data)}")
 
-    yeeter.push(data['alerts'])
+    try:
+        yeeter.push(data['alerts'])
+    except Exception as e:
+        log.error(f"Failed to push alerts to GNOC: {str(e)}")
+        return jsonify(error=str(e)), 502
 
     # Return a response
     return {'status': 'success'}
