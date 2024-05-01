@@ -2,9 +2,13 @@
 name = "gnocpush"
 version = "0.1.0"
 dependencies = [
+  "flake8-pyproject",
+  "flask",
   "globalnoc_alertmon_agent",
+  "prometheus-flask-exporter==0.23.0",
   "python-dateutil",
   "requests",
+  "waitress",
 ]
 
 [build-system]
@@ -12,4 +16,11 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project.scripts]
-gnocpush = "gnocpush.cli:main"
+gnocpush = "gnocpush.cli.gnocpush:main"
+gnocscrape = "gnocpush.cli.gnocscrape:main"
+
+[tool.flake8]
+ignore = ['E221', 'E251']
+
+[tool.setuptools.packages.find]
+exclude = ["charts"]
