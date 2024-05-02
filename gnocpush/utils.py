@@ -15,7 +15,7 @@ def sanitize_severity(severity):
         case 'major' | 'warning': s = 'Major'
         case 'minor' | 'info': s = 'Minor'
         case 'unknown': s = 'Unknown'
-        case 'ok': s = 'Ok'
+        case 'ok': s = 'OK'
 
     log.debug(f'severity: {severity} -> {s}')
 

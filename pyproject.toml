@@ -6,6 +6,7 @@ dependencies = [
   "flask",
   "globalnoc_alertmon_agent",
   "prometheus-flask-exporter==0.23.0",
+  "pytest",
   "python-dateutil",
   "requests",
   "waitress",
@@ -24,3 +25,10 @@ ignore = ['E221', 'E251']
 
 [tool.setuptools.packages.find]
 exclude = ["charts"]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-q"
+testpaths = [
+  "tests",
+]

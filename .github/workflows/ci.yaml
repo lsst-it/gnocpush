@@ -32,6 +32,20 @@ jobs:
       - name: flake8 Lint
         uses: py-actions/flake8@v2
 
+  pytest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source repository
+        uses: actions/checkout@v4
+      - name: Set up Python environment
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: pip install .
+      - name: pytest
+        run: pytest
+
   hadolint:
     runs-on: ubuntu-latest
     steps:
