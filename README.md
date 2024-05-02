@@ -4,9 +4,10 @@ A simple service to accept webhook payloads from [Prometheus Alertmanager](https
 
 ## Alert format
 
-`gnocpush` expects that alerts have labels taht match GlocalNOC's required parameter names.
+The `gnocpush` input json format is the same as the [Prometheus Alertmanager webhook format](https://prometheus.io/docs/alerting/latest/configuration/#webhook_config).
+Labels/annotations are required that match GlocalNOC's required parameter names.
 
-Note that group annotations/labels from the alert group are ignored.
+Note that the top level common/group annotations/labels are ignored.
 
 ### Required annotations
 
