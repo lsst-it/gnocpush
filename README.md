@@ -129,6 +129,25 @@ Note that `gnocpush` does not impose any alert grouping constraints.
 
 ## Deployment on Kubernetes
 
+OCI images are available at [ghcr.io/lsst-it/gnocpush](https://github.com/lsst-it/gnocpush/pkgs/container/gnocpush).
+
+A helm chart is available in the `charts` directory and in a helm repository at [https://lsst-it.github.io/gnocpush](https://lsst-it.github.io/gnocpush).
+
+### Helm Chart
+
+Installing with helm via the helm repository:
+
+```bash
+helm repo add gnocpush https://lsst-it.github.io/gnocpush
+helm repo update
+helm upgrade --install \
+  gnocpush gnocpush/gnocpush \
+  --create-namespace --namespace gnocpush \
+  -f ./values.yaml
+```
+
+Installing with helm from a git repo clone:
+
 ```bash
 helm upgrade --install \
   gnocpush ./charts/gnocpush \
