@@ -1,7 +1,6 @@
 import logging
 
-from gnocpush.utils import sanitize_severity
-from dateutil import parser
+from gnocpush.utils import alertmanager_to_gnoc
 from globalnoc_alertmon_agent import AlertMonAgent, Alert
 
 log = logging.getLogger(__name__)
@@ -18,19 +17,8 @@ class Pusher:
         )
 
     def push(self, alerts):
-
         for alert in alerts:
-            sev = sanitize_severity(alert['labels'].get('severity', 'Unknown'))
-            desc = alert['annotations'].get('description', 'Unknown')
-
-            data = {
-                'node_name': alert['labels'].get('node_name', 'Unknown'),
-                'device': alert['labels'].get('device'),
-                'service_name': alert['labels'].get('service_name', 'Unknown'),
-                'severity': sev,
-                'description': desc,
-                'start_time': parser.isoparse(alert['startsAt']).timestamp()
-            }
+            data = alertmanager_to_gnoc(alert)
 
             log.debug(f"Pushing alert: {data}")
 
