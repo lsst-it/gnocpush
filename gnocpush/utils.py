@@ -2,6 +2,8 @@
 
 import logging
 
+from dateutil import parser
+
 log = logging.getLogger(__name__)
 
 
@@ -20,3 +22,20 @@ def sanitize_severity(severity):
     log.debug(f'severity: {severity} -> {s}')
 
     return s
+
+
+def alertmanager_to_gnoc(alert):
+    sev = sanitize_severity(alert['labels'].get('severity', 'Unknown'))
+    desc = alert['annotations'].get('description', 'Unknown')
+    start_time = int(parser.isoparse(alert['startsAt']).timestamp())
+
+    data = {
+        'node_name': alert['labels'].get('node_name', 'Unknown'),
+        'device': alert['labels'].get('device'),
+        'service_name': alert['labels'].get('service_name', 'Unknown'),
+        'severity': sev,
+        'description': desc,
+        'start_time': start_time,
+    }
+
+    return data

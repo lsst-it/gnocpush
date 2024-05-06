@@ -21,14 +21,21 @@ gnocpush = "gnocpush.cli.gnocpush:main"
 gnocscrape = "gnocpush.cli.gnocscrape:main"
 
 [tool.flake8]
-ignore = ['E221', 'E251']
+ignore = ["E221", "E251"]
 
 [tool.setuptools.packages.find]
 exclude = ["charts"]
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-addopts = "-q"
+addopts = [
+    "-q",
+    "--import-mode=importlib",
+]
 testpaths = [
   "tests",
+]
+markers = [
+  "sanitize_severity",
+  "alertmanager_to_gnoc",
 ]
