@@ -4,7 +4,7 @@ version = "0.1.0"
 dependencies = [
   "flake8-pyproject",
   "flask",
-  "globalnoc_alertmon_agent",
+  "globalnoc_alertmon_agent==1.0.1",
   "prometheus-flask-exporter==0.23.0",
   "pytest",
   "python-dateutil",
