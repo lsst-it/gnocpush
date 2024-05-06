@@ -22,6 +22,9 @@ gnocscrape = "gnocpush.cli.gnocscrape:main"
 
 [tool.flake8]
 ignore = ["E221", "E251"]
+exclude = [
+  "venv",
+]
 
 [tool.setuptools.packages.find]
 exclude = ["charts"]
