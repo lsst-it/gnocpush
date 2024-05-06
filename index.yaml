@@ -2,6 +2,16 @@ apiVersion: v1
 entries:
   gnocpush:
   - apiVersion: v2
+    appVersion: 0.2.0
+    created: "2024-05-06T19:24:16.779355787Z"
+    description: Push Prometheus Alertmanager webhook payloads to Global NOC
+    digest: 8c3462e8a8355075473936885918be8567010129392c47a6a64259793b3d88a7
+    name: gnocpush
+    type: application
+    urls:
+    - https://github.com/lsst-it/gnocpush/releases/download/gnocpush-0.2.0/gnocpush-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
     appVersion: 0.1.0
     created: "2024-05-01T22:37:23.543242145Z"
     description: Push Prometheus Alertmanager webhook payloads to Global NOC
@@ -11,4 +21,4 @@ entries:
     urls:
     - https://github.com/lsst-it/gnocpush/releases/download/gnocpush-0.1.0/gnocpush-0.1.0.tgz
     version: 0.1.0
-generated: "2024-05-01T22:37:23.543276971Z"
+generated: "2024-05-06T19:24:16.779364673Z"
