@@ -10,8 +10,8 @@ name: Build and Publish
       - "v*.*.*"
   pull_request:
     branches:
-      - "main"
-      - 'master'
+      - main
+      - master
 
 env:
   REGISTRY: ghcr.io
@@ -125,8 +125,7 @@ jobs:
 
 
   chart-release:
-    # only run when merged to main
-    if: github.ref == 'refs/heads/main'
+    if: startsWith(github.ref, 'refs/tags/')
     name: Helm Chart Release
     needs:
       - oci_image
